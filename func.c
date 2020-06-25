@@ -1,32 +1,32 @@
 #include <stdio.h>
 #include <math.h>
 
-void func(double F(double),double x){
-    printf("%3.3f\t%3.3f\n", F(x),x);
+// define pi, just use inverse of sin
+#define PI -2*asin(-1.0)
+
+// precision for derivative calculation
+const double pre = 1e-10;
+
+// define a function that accepts a function
+double func(double F(double), double x){
+    return F(x);
 }
 
-double square(double x){
-    return x*x;
+// define a derivative, use constant precision from above
+double derivative(double F(double), double x){
+    return (F(x+pre)-F(x-pre))/(2.0 * pre);
 }
 
-double cube(double x){
-    return x*x*x;
-}
+int main(){
+    // cycle through denominator..  calculate function and derivative
+    for (int i = 1; i<= 10; i++){
+        printf("\nFunctions for Pi/%d\n",i);
+        printf("sin is: %g\n",func(sin, PI/(double)i));
+        printf("cos is: %g\n",func(cos, PI/(double)i));
 
-int main(int argc, char **argv){
-    func(sin,0.33);
-    func(sqrt,2);
-    func(cos,0.5);
-    func(tan,0.25);
-    func(square,5.0);
-    func(cube,2.0);
-    if (argc > 1){
-        printf("-------\n");
-        printf("%d\n",argc);
-        printf("-------\n");
-        for (int i=0 ; i < argc ; i++) {
-            printf("%d\t\t%s\n",i,argv[i]);
-        }
+        printf("\nDerivatives for Pi/%d\n",i);
+        printf("sin is: %g\n",derivative(sin, PI/(double)i));
+        printf("cos is: %g\n",derivative(cos, PI/(double)i));
     }
     return 0;
 }
